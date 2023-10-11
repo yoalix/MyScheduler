@@ -67,7 +67,6 @@ export const DEFAULT_STATE: StateType = {
   end: Day.todayWithOffset(14),
   selectedDate: Day.todayWithOffset(0),
   duration: DEFAULT_DURATION,
-  modal: "closed",
   name: undefined,
   email: undefined,
   location: undefined,

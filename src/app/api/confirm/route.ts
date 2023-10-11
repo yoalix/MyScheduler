@@ -4,7 +4,7 @@ import { z } from "zod";
 import createCalendarAppointment from "@/lib/availability/createAppointment";
 import getHash from "@/lib/hash";
 import { redirect } from "next/dist/server/api-utils";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 const AppointmentPropsSchema = z.object({
   name: z.string(),
@@ -20,21 +20,19 @@ const AppointmentPropsSchema = z.object({
     }),
 });
 
-export async function GET(req: NextApiRequest, res: NextApiResponse) {
+export async function GET(req: NextRequest, res: NextResponse) {
   console.log("req.query", req.url);
   const url = new URL(req.url!);
   const data = url.searchParams.get("data");
   const key = url.searchParams.get("key");
   if (!data) {
-    res.status(400).json({ error: "Data is missing" });
-    return;
+    return NextResponse.json({ error: "Data is missing" }, { status: 400 });
   }
   // Make sure the hash matches before doing anything
   const hash = getHash(decodeURIComponent(data as string));
 
   if (hash !== key) {
-    res.status(403).json({ error: "Invalid key" });
-    return;
+    return NextResponse.json({ error: "Invalid key" }, { status: 403 });
   }
 
   const object = JSON.parse(decodeURIComponent(data as string));
@@ -43,8 +41,7 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
   const validationResult = AppointmentPropsSchema.safeParse(object);
 
   if (!validationResult.success) {
-    res.status(400).json({ error: "Malformed request" });
-    return;
+    return NextResponse.json({ error: "Malformed request" }, { status: 400 });
   }
 
   const validObject = validationResult.data;
@@ -54,8 +51,7 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
     Number.isNaN(Date.parse(validObject.start)) ||
     Number.isNaN(Date.parse(validObject.end))
   ) {
-    res.status(400).json({ error: "Malformed request" });
-    return;
+    return NextResponse.json({ error: "Malformed request" }, { status: 400 });
   }
 
   // Create the confirmed appointment
@@ -86,5 +82,8 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
   }
 
   // Otherwise, something's wrong.
-  res.status(500).json({ error: "Error trying to create an appointment" });
+  return NextResponse.json(
+    { error: "Error trying to create an appointment" },
+    { status: 500 }
+  );
 }
