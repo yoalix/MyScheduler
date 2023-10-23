@@ -1,6 +1,6 @@
 import React from "react";
 import { Calendar } from "./ui/calendar";
-import { state } from "@/store";
+import { store } from "@/store";
 import Day from "@/lib/day";
 import { useSnapshot } from "valtio";
 import { cn } from "@/lib/utils";
@@ -19,7 +19,7 @@ const CalendarPopover = ({
 }: {
   availability: Record<string, DateTimeInterval[]>;
 }) => {
-  const snap = useSnapshot(state);
+  const snap = useSnapshot(store);
   const [open, setOpen] = React.useState(false);
 
   let footer = <p>Please pick a day.</p>;
@@ -49,10 +49,10 @@ const CalendarPopover = ({
           <Calendar
             selected={snap.state.selectedDate.toDate()}
             onSelect={(date) => {
-              state.selectedDate = date
+              store.state.selectedDate = date
                 ? Day.dayFromDate(date)
                 : Day.todayWithOffset();
-              state.selectedTime = undefined;
+              store.state.selectedTime = undefined;
               setOpen(false);
             }}
             footer={footer}

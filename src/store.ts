@@ -3,9 +3,9 @@
 import { proxy } from "valtio";
 import { DEFAULT_STATE } from "./lib/config";
 
-export const state = proxy({
+export const store = proxy({
   state: DEFAULT_STATE,
   resetStore: () => {
-    state.state = { ...DEFAULT_STATE };
+    store.state = { ...DEFAULT_STATE };
   },
 });

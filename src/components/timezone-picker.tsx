@@ -1,5 +1,5 @@
 import getTimezoneData from "@/lib/timezones";
-import { state } from "@/store";
+import { store } from "@/store";
 import React from "react";
 import { useSnapshot } from "valtio";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
@@ -17,7 +17,7 @@ import { cn } from "@/lib/utils";
 const { groupLookupMap, timeZoneMap } = getTimezoneData();
 
 const TimezonePicker = () => {
-  const snap = useSnapshot(state);
+  const snap = useSnapshot(store);
   const selectedTimeZoneValue = groupLookupMap.get(snap.state.timeZone);
   const [open, setOpen] = React.useState(false);
   return (
@@ -47,7 +47,7 @@ const TimezonePicker = () => {
                 <CommandItem
                   key={value}
                   onSelect={(currentValue) => {
-                    state.timeZone = value;
+                    store.state.timeZone = value;
                     setOpen(false);
                   }}
                 >

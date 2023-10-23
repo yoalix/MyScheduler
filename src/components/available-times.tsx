@@ -6,7 +6,7 @@ import {
   formatLocalTime,
 } from "@/lib/availability/helpers";
 import { useSnapshot } from "valtio";
-import { state } from "@/store";
+import { store } from "@/store";
 import { Separator } from "./ui/separator";
 import { cn } from "@/lib/utils";
 import {
@@ -24,11 +24,13 @@ type AvailableTimesProps = {
 };
 
 const AvailableTimes = ({ availability }: AvailableTimesProps) => {
-  const snap = useSnapshot(state);
+  const snap = useSnapshot(store);
   const timeZone = snap.state.timeZone;
   return (
     <>
-      <Select onValueChange={(time) => (state.selectedTime = JSON.parse(time))}>
+      <Select
+        onValueChange={(time) => (snap.state.selectedTime = JSON.parse(time))}
+      >
         <SelectTrigger className="md:w-[15rem] w-full">
           <SelectValue placeholder={"Select a time"} />
         </SelectTrigger>
@@ -43,7 +45,7 @@ const AvailableTimes = ({ availability }: AvailableTimesProps) => {
                   <SelectItem
                     key={time.start.toISOString() + time.end.toISOString()}
                     value={JSON.stringify(time)}
-                    onClick={() => (state.selectedTime = time)}
+                    onClick={() => (store.state.selectedTime = time)}
                   >
                     {value}
                   </SelectItem>

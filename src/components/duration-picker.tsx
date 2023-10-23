@@ -1,11 +1,11 @@
 import { ALLOWED_DURATIONS } from "@/lib/config";
-import { state } from "@/store";
+import { store } from "@/store";
 import clsx from "clsx";
 import React from "react";
 import { useSnapshot } from "valtio";
 
 const DurationPicker = () => {
-  const snap = useSnapshot(state);
+  const snap = useSnapshot(store);
   return (
     <div>
       <label
@@ -19,7 +19,7 @@ const DurationPicker = () => {
           <button
             key={duration}
             onClick={() => {
-              state.duration = duration;
+              store.state.duration = duration;
             }}
             type="button"
             className={clsx(

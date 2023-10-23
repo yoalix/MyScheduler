@@ -5,15 +5,14 @@ import { experimental_useFormState as useFormState } from "react-dom";
 
 import AvailableTimes from "./available-times";
 import { DateTimeInterval } from "@/lib/types";
-import { state } from "@/store";
+import { store } from "@/store";
 import { format } from "date-fns-tz";
 import { useSnapshot } from "valtio";
-import Day from "@/lib/day";
 import DurationPicker from "./duration-picker";
 import TimezonePicker from "./timezone-picker";
 import getPotentialTimes from "@/lib/availability/getPotentialTimes";
 import getAvailability from "@/lib/availability/getAvailability";
-import { DEFAULT_STATE, OWNER_AVAILABILITY, StateType } from "@/lib/config";
+import { OWNER_AVAILABILITY } from "@/lib/config";
 import CalendarPopover from "./calendar-popover";
 import {
   Card,
@@ -27,9 +26,6 @@ import Booking from "./booking";
 import { Button } from "./ui/button";
 import { submit } from "@/app/actions";
 import { useToast } from "./ui/use-toast";
-import { sub } from "date-fns";
-import { formatLocalTime } from "@/lib/availability/helpers";
-import Spinner from "./ui/spinner";
 import SubmitButton from "./submit-button";
 
 const initialState = {
@@ -37,7 +33,7 @@ const initialState = {
 };
 
 const Scheduler = ({ busy }: { busy: DateTimeInterval[] }) => {
-  const snap = useSnapshot(state);
+  const snap = useSnapshot(store);
   const [res, formAction] = useFormState(submit, initialState);
 
   const { toast } = useToast();
@@ -81,7 +77,7 @@ const Scheduler = ({ busy }: { busy: DateTimeInterval[] }) => {
     : [];
 
   const reset = () => {
-    state.resetStore();
+    store.resetStore();
   };
   if (res?.message) {
     toast({
@@ -91,21 +87,20 @@ const Scheduler = ({ busy }: { busy: DateTimeInterval[] }) => {
     });
   }
   const handleAction = () => {
-    console.log(state);
     const formData = new FormData();
-    const startString = state.state.selectedTime
-      ? new Date(state.state.selectedTime.start).toISOString()
+    const startString = store.state.selectedTime
+      ? new Date(store.state.selectedTime.start).toISOString()
       : "";
-    const endString = state.state.selectedTime
-      ? new Date(state.state.selectedTime.end).toISOString()
+    const endString = store.state.selectedTime
+      ? new Date(store.state.selectedTime.end).toISOString()
       : "";
-    formData.append("name", state.state.name || "");
-    formData.append("email", state.state.email || "");
+    formData.append("name", store.state.name || "");
+    formData.append("email", store.state.email || "");
     formData.append("start", startString);
     formData.append("end", endString);
-    formData.append("timeZone", state.state.timeZone);
-    formData.append("location", state.state.location || "");
-    formData.append("duration", state.state.duration.toString() || "");
+    formData.append("timeZone", store.state.timeZone);
+    formData.append("location", store.state.location || "");
+    formData.append("duration", store.state.duration.toString() || "");
 
     formAction(formData);
   };
