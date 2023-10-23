@@ -29,9 +29,9 @@ const DurationPicker = () => {
                 "rounded-r-md": i === ALLOWED_DURATIONS.length - 1,
                 "-ml-px": i > 0,
                 "text-slate-forground ring-slate-300 hover:bg-slate hover:text-slate-foreground hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-slate-800 dark:hover:text-slate-50":
-                  duration !== snap.duration,
+                  duration !== snap.state.duration,
                 "bg-primary text-primary-foreground ring-slate-600 shadow-inner shadow-slate-900 bg-slate-900 text-slate-50 hover:bg-slate-900 hover:text-slate-50 focus:bg-slate-900 focus:text-slate-50 dark:bg-slate-50 dark:text-slate-900 dark:hover:bg-slate-50 dark:hover:text-slate-900 dark:focus:bg-slate-50 dark:focus:text-slate-900 dark:focus-visible:ring-slate-300  ":
-                  duration === snap.duration,
+                  duration === snap.state.duration,
               }
             )}
           >

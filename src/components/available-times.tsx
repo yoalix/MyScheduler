@@ -25,7 +25,7 @@ type AvailableTimesProps = {
 
 const AvailableTimes = ({ availability }: AvailableTimesProps) => {
   const snap = useSnapshot(state);
-  const timeZone = snap.timeZone;
+  const timeZone = snap.state.timeZone;
   return (
     <>
       <Select onValueChange={(time) => (state.selectedTime = JSON.parse(time))}>

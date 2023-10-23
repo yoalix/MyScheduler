@@ -23,8 +23,8 @@ const CalendarPopover = ({
   const [open, setOpen] = React.useState(false);
 
   let footer = <p>Please pick a day.</p>;
-  if (snap.selectedDate) {
-    footer = <p>You picked {snap.selectedDate.toString()}.</p>;
+  if (snap.state.selectedDate) {
+    footer = <p>You picked {snap.state.selectedDate.toString()}.</p>;
   }
   return (
     <div>
@@ -34,11 +34,11 @@ const CalendarPopover = ({
             variant={"outline"}
             className={cn(
               "md:w-[15rem] w-full pl-3 text-left font-normal",
-              !snap.selectedDate && "text-muted-foreground"
+              !snap.state.selectedDate && "text-muted-foreground"
             )}
           >
-            {snap.selectedDate ? (
-              format(snap.selectedDate.toDate(), "PPP")
+            {snap.state.selectedDate ? (
+              format(snap.state.selectedDate.toDate(), "PPP")
             ) : (
               <span>Pick a date</span>
             )}
@@ -47,7 +47,7 @@ const CalendarPopover = ({
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0" align="start">
           <Calendar
-            selected={snap.selectedDate.toDate()}
+            selected={snap.state.selectedDate.toDate()}
             onSelect={(date) => {
               state.selectedDate = date
                 ? Day.dayFromDate(date)
@@ -60,11 +60,11 @@ const CalendarPopover = ({
             disabled={[
               { dayOfWeek: [0, 6] },
               {
-                before: snap.start.toDate(),
+                before: snap.state.start.toDate(),
               },
               // unavailable after foutreen days
               {
-                after: snap.end.toDate(),
+                after: snap.state.end.toDate(),
               },
               (date) => {
                 const dateKey = date.toISOString().split("T")[0];

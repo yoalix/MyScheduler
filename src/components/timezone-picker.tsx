@@ -18,7 +18,7 @@ const { groupLookupMap, timeZoneMap } = getTimezoneData();
 
 const TimezonePicker = () => {
   const snap = useSnapshot(state);
-  const selectedTimeZoneValue = groupLookupMap.get(snap.timeZone);
+  const selectedTimeZoneValue = groupLookupMap.get(snap.state.timeZone);
   const [open, setOpen] = React.useState(false);
   return (
     <>
@@ -54,7 +54,9 @@ const TimezonePicker = () => {
                   <Check
                     className={cn(
                       "mr-2 h-4 w-4",
-                      value === snap.timeZone ? "opacity-100" : "opacity-0"
+                      value === snap.state.timeZone
+                        ? "opacity-100"
+                        : "opacity-0"
                     )}
                   />
                   {`GMT${display}`}

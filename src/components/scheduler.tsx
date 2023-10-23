@@ -13,7 +13,7 @@ import DurationPicker from "./duration-picker";
 import TimezonePicker from "./timezone-picker";
 import getPotentialTimes from "@/lib/availability/getPotentialTimes";
 import getAvailability from "@/lib/availability/getAvailability";
-import { DEFAULT_STATE, OWNER_AVAILABILITY } from "@/lib/config";
+import { DEFAULT_STATE, OWNER_AVAILABILITY, StateType } from "@/lib/config";
 import CalendarPopover from "./calendar-popover";
 import {
   Card,
@@ -44,9 +44,9 @@ const Scheduler = ({ busy }: { busy: DateTimeInterval[] }) => {
 
   let maximumAvailability = 0;
   const potential = getPotentialTimes({
-    start: snap.start,
-    end: snap.end,
-    duration: snap.duration,
+    start: snap.state.start,
+    end: snap.state.end,
+    duration: snap.state.duration,
     availabilitySlots: OWNER_AVAILABILITY,
   });
   const availability = getAvailability({
@@ -61,7 +61,9 @@ const Scheduler = ({ busy }: { busy: DateTimeInterval[] }) => {
     Record<string, DateTimeInterval[]>
   >((acc, slot) => {
     // Gives us the same YYYY-MM-DD format as Day.toString()
-    const date = format(slot.start, "yyyy-MM-dd", { timeZone: snap.timeZone });
+    const date = format(slot.start, "yyyy-MM-dd", {
+      timeZone: snap.state.timeZone,
+    });
 
     if (!acc[date]) {
       acc[date] = [];
@@ -74,14 +76,12 @@ const Scheduler = ({ busy }: { busy: DateTimeInterval[] }) => {
     return acc;
   }, {});
 
-  const availableTimes = snap.selectedDate
-    ? availabilityByDate[snap.selectedDate.toString()] ?? []
+  const availableTimes = snap.state.selectedDate
+    ? availabilityByDate[snap.state.selectedDate.toString()] ?? []
     : [];
 
   const reset = () => {
-    for (const initial in DEFAULT_STATE) {
-      state[initial] = DEFAULT_STATE[initial];
-    }
+    state.resetStore();
   };
   if (res?.message) {
     toast({
@@ -93,19 +93,19 @@ const Scheduler = ({ busy }: { busy: DateTimeInterval[] }) => {
   const handleAction = () => {
     console.log(state);
     const formData = new FormData();
-    const startString = state.selectedTime
-      ? new Date(state.selectedTime.start).toISOString()
+    const startString = state.state.selectedTime
+      ? new Date(state.state.selectedTime.start).toISOString()
       : "";
-    const endString = state.selectedTime
-      ? new Date(state.selectedTime.end).toISOString()
+    const endString = state.state.selectedTime
+      ? new Date(state.state.selectedTime.end).toISOString()
       : "";
-    formData.append("name", state.name || "");
-    formData.append("email", state.email || "");
+    formData.append("name", state.state.name || "");
+    formData.append("email", state.state.email || "");
     formData.append("start", startString);
     formData.append("end", endString);
-    formData.append("timeZone", state.timeZone);
-    formData.append("location", state.location || "");
-    formData.append("duration", state.duration.toString() || "");
+    formData.append("timeZone", state.state.timeZone);
+    formData.append("location", state.state.location || "");
+    formData.append("duration", state.state.duration.toString() || "");
 
     formAction(formData);
   };

@@ -9,6 +9,7 @@ import ConfirmationEmail from "@/lib/email/messages/confirmation";
 import getHash from "@/lib/hash";
 import type { DateTimeIntervalWithTimezone } from "@/lib/types";
 import { OWNER_TIMEZONE } from "@/lib/config";
+import { NextRequest, NextResponse } from "next/server";
 
 // Define the rate limiter
 const rateLimitLRU = new LRUCache({
@@ -36,25 +37,23 @@ const AppointmentRequestSchema = z.object({
     }),
 });
 
-export default async function POST(
-  req: NextApiRequest,
-  res: NextApiResponse
-): Promise<void> {
+export async function POST(req: NextRequest, res: NextResponse) {
   // Apply rate limiting using the client's IP address
 
   const limitReached = checkRateLimit();
 
   if (limitReached) {
-    res.status(429).json({ error: "Rate limit exceeded" });
-    return;
+    return NextResponse.json({ error: "Rate limit exceeded" }, { status: 429 });
   }
 
   // Validate and parse the request body using Zod
   const validationResult = AppointmentRequestSchema.safeParse(req.body);
 
   if (!validationResult.success) {
-    res.status(400).json({ error: validationResult.error.message });
-    return;
+    return NextResponse.json(
+      { error: validationResult.error.message },
+      { status: 400 }
+    );
   }
   const { data } = validationResult;
 
@@ -62,7 +61,7 @@ export default async function POST(
   const end = new Date(data.end);
 
   const approveUrl = `${
-    req.headers.origin ?? "?"
+    req.headers.get("origin") ?? "?"
   }/api/confirm/?data=${encodeURIComponent(JSON.stringify(data))}&key=${getHash(
     JSON.stringify(data)
   )}`;
@@ -97,7 +96,7 @@ export default async function POST(
     body: confirmationEmail.body,
   });
 
-  res.status(200).json({ success: true });
+  return NextResponse.json({ success: true });
 
   /**
    * Checks the rate limit for the current IP address.
@@ -105,10 +104,11 @@ export default async function POST(
    * @return {boolean} Whether the rate limit has been reached.
    */
   function checkRateLimit(): boolean {
-    const forwarded = req.headers["x-forwarded-for"];
+    const forwarded = req.headers.get("x-forwarded-for");
+
     const ip =
       (Array.isArray(forwarded) ? forwarded[0] : forwarded) ??
-      req.socket.remoteAddress ??
+      req.headers.get("x-real-ip") ??
       "127.0.0.1";
 
     const tokenCount = (rateLimitLRU.get(ip) as number[]) || [0];
