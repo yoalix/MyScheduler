@@ -7,8 +7,10 @@ db.exec(
 );`
 );
 
-export const getRefreshToken = () => {
-  return db.prepare("select token from refresh_token limit 1;").get();
+export const getRefreshToken = (): { token: string } => {
+  return db.prepare("select token from refresh_token limit 1;").get() as {
+    token: string;
+  };
 };
 
 export const createOrUpdateRefreshToken = (token: string) => {

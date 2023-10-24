@@ -1,3 +1,5 @@
+import { getRefreshToken } from "../db/sqlite";
+
 /**
  * Retrieves an access token from Google using a refresh token.
  *
@@ -9,17 +11,17 @@ export default async function getAccessToken(): Promise<string> {
   if (!process.env.GOOGLE_OAUTH_SECRET) {
     throw new Error("GOOGLE_OAUTH_SECRET not set");
   }
-  if (!process.env.GOOGLE_OAUTH_REFRESH) {
-    throw new Error("GOOGLE_OAUTH_REFRESH not set");
-  }
   if (!process.env.GOOGLE_OAUTH_CLIENT_ID) {
     throw new Error("GOOGLE_OAUTH_CLIENT_ID not set");
   }
-
+  const refreshToken = await getRefreshToken();
+  if (!refreshToken) {
+    throw new Error("GOOGLE_OAUTH_REFRESH not set");
+  }
   const params = new URLSearchParams({
     grant_type: "refresh_token",
     client_secret: process.env.GOOGLE_OAUTH_SECRET,
-    refresh_token: process.env.GOOGLE_OAUTH_REFRESH,
+    refresh_token: refreshToken.token,
     client_id: process.env.GOOGLE_OAUTH_CLIENT_ID,
   });
 
