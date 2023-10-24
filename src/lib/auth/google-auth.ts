@@ -56,9 +56,7 @@ async function saveCredentials(client: OAuth2Client) {
  */
 async function loadSavedCredentialsIfExist() {
   try {
-    const content = fs.readFileSync(TOKEN_PATH);
-    const credentials = JSON.parse(content);
-    return google.auth.fromJSON(credentials);
+    return process.env["GOOGLE_OAUTH_REFRESH"];
   } catch (err) {
     console.log({ err });
     return null;

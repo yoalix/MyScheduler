@@ -16,7 +16,7 @@ export default async function getBusyTimes({ start, end }: DateTimeInterval) {
         "Content-Type": "application/json",
         Authorization: `Bearer ${await getAccessToken().catch((err) => {
           console.log(err);
-          redirect("/admin/login");
+          redirect("/api/admin-login");
         })}`,
       },
       body: JSON.stringify({
