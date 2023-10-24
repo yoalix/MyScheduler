@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "build:sqlite3": "cd node_modules/better-sqlite3 && bun run build-debug"
   },
   "dependencies": {
     "@google-cloud/local-auth": "2.1.0",
@@ -21,6 +22,7 @@
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-toast": "^1.1.5",
     "@vvo/tzdb": "^6.108.0",
+    "better-sqlite3": "^9.0.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "cmdk": "^0.2.0",
@@ -32,6 +34,7 @@
     "lucide-react": "^0.279.0",
     "next": "latest",
     "next-themes": "^0.2.1",
+    "node-gyp": "^9.4.0",
     "nodemailer": "^6.9.5",
     "open": "^9.1.0",
     "react": "latest",
@@ -44,12 +47,14 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@types/better-sqlite3": "^7.6.6",
     "@types/node": "latest",
     "@types/nodemailer": "^6.4.13",
     "@types/react": "latest",
     "@types/react-dom": "latest",
     "add": "^2.0.6",
     "autoprefixer": "latest",
+    "bun-types": "^1.0.7",
     "eslint": "latest",
     "eslint-config-next": "latest",
     "eslint-plugin-valtio": "^0.6.2",

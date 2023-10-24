@@ -8,6 +8,7 @@ const fs = require("fs");
 
 import { AddressInfo } from "net";
 import { redirect } from "next/navigation";
+import { createOrUpdateRefreshToken, getRefreshToken } from "../db/sqlite";
 
 const path = require("path");
 const SCOPES = [
@@ -39,6 +40,7 @@ function isAddressInfo(addr: string | AddressInfo | null): addr is AddressInfo {
 async function saveCredentials(client: OAuth2Client) {
   const keys = credentials;
   const key = keys.web;
+  const refreshToken = client.credentials.refresh_token;
   const payload = JSON.stringify({
     type: "authorized_user",
     client_id: key.client_id,
@@ -48,6 +50,9 @@ async function saveCredentials(client: OAuth2Client) {
   fs.writeFileSync(TOKEN_PATH, payload);
   process.env["GOOGLE_OAUTH_REFRESH"] =
     client.credentials.refresh_token || undefined;
+  if (refreshToken) {
+    createOrUpdateRefreshToken(refreshToken);
+  }
 }
 /**
  * Reads previously authorized credentials from the save file.
@@ -56,7 +61,7 @@ async function saveCredentials(client: OAuth2Client) {
  */
 async function loadSavedCredentialsIfExist() {
   try {
-    return process.env["GOOGLE_OAUTH_REFRESH"];
+    return getRefreshToken();
   } catch (err) {
     console.log({ err });
     return null;
