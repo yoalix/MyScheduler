@@ -4,10 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "bun run build:sqlite3 && next build",
+    "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "build:sqlite3": "cd node_modules/better-sqlite3 && bun run build-debug"
+    "lint": "next lint"
   },
   "dependencies": {
     "@google-cloud/local-auth": "2.1.0",
@@ -33,7 +32,6 @@
     "lucide-react": "^0.279.0",
     "next": "latest",
     "next-themes": "^0.2.1",
-    "node-gyp": "^9.4.0",
     "nodemailer": "^6.9.5",
     "open": "^9.1.0",
     "react": "latest",
