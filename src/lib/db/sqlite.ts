@@ -1,21 +1,8 @@
-import Database from "better-sqlite3";
-
-const db = Database("./mydb.db", { verbose: console.log });
-db.exec(
-  `create table if not exists refresh_token (
-    token TEXT PRIMARY KEY
-);`
-);
-
-export const getRefreshToken = (): { token: string } => {
-  return db.prepare("select token from refresh_token limit 1;").get() as {
-    token: string;
-  };
+export const getRefreshToken = () => {
+  return process.env.GOOGLE_OAUTH_REFRESH;
 };
 
 export const createOrUpdateRefreshToken = (token: string) => {
-  const query = db
-    .prepare("insert or replace into refresh_token (token) values (?);")
-    .run(token);
+  process.env["GOOGLE_OAUTH_REFRESH"] = token;
   return getRefreshToken();
 };

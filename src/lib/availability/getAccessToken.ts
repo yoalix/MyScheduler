@@ -21,7 +21,7 @@ export default async function getAccessToken(): Promise<string> {
   const params = new URLSearchParams({
     grant_type: "refresh_token",
     client_secret: process.env.GOOGLE_OAUTH_SECRET,
-    refresh_token: refreshToken.token,
+    refresh_token: refreshToken,
     client_id: process.env.GOOGLE_OAUTH_CLIENT_ID,
   });
 
