@@ -2,6 +2,9 @@ import { compareAsc } from "date-fns";
 import { CALENDARS_TO_CHECK, OWNER_TIMEZONE } from "../config";
 import { DateTimeInterval } from "../types";
 import getAccessToken from "./getAccessToken";
+import { redirect } from "next/navigation";
+
+const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY || "";
 
 export default async function getBusyTimes({ start, end }: DateTimeInterval) {
   const response = await fetch(
@@ -11,7 +14,10 @@ export default async function getBusyTimes({ start, end }: DateTimeInterval) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${await getAccessToken()}`,
+        Authorization: `Bearer ${await getAccessToken().catch((err) => {
+          console.log(err);
+          redirect("/admin/login");
+        })}`,
       },
       body: JSON.stringify({
         timeMin: start.toISOString(),
@@ -22,7 +28,7 @@ export default async function getBusyTimes({ start, end }: DateTimeInterval) {
     }
   );
   const busyData = (await response.json()) as Record<string, unknown>;
-
+  console.log("busyData", busyData);
   return Object.values(busyData.calendars ?? {})
     .flatMap((calendar) => calendar.busy ?? [])
     .sort(compareAsc)
