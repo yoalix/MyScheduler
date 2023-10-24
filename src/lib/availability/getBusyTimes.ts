@@ -4,8 +4,6 @@ import { DateTimeInterval } from "../types";
 import getAccessToken from "./getAccessToken";
 import { redirect } from "next/navigation";
 
-const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY || "";
-
 export default async function getBusyTimes({ start, end }: DateTimeInterval) {
   const response = await fetch(
     "https://www.googleapis.com/calendar/v3/freeBusy",

@@ -29,7 +29,7 @@ const AvailableTimes = ({ availability }: AvailableTimesProps) => {
   return (
     <>
       <Select
-        onValueChange={(time) => (snap.state.selectedTime = JSON.parse(time))}
+        onValueChange={(time) => (store.state.selectedTime = JSON.parse(time))}
       >
         <SelectTrigger className="md:w-[15rem] w-full">
           <SelectValue placeholder={"Select a time"} />

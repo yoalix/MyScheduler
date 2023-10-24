@@ -18,5 +18,6 @@ export async function GET(req: NextRequest, res: NextResponse) {
   }
 
   const tokens = await getAndStoreTokens(searchParams.get("code")!);
+  console.log("tokens", tokens);
   redirect("/");
 }
