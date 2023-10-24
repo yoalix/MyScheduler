@@ -1,6 +1,7 @@
 import React from "react";
 
-import { useFormStatus } from "react-dom";
+// @ts-expect-error
+import { experimental_useFormStatus as useFormStatus } from "react-dom";
 import { Button } from "./ui/button";
 import Spinner from "./ui/spinner";
 
