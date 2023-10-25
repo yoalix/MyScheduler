@@ -1,6 +1,11 @@
+function resetTokens() {
+  process.env["GOOGLE_OAUTH_ACCESS"] = "";
+  process.env["GOOGLE_OAUTH_REFRESH"] = "";
+}
+
 export const getTokens = () => {
   return {
-    acessToken: process.env.GOOGLE_OAUTH_ACCESS,
+    accessToken: process.env.GOOGLE_OAUTH_ACCESS,
     refreshToken: process.env.GOOGLE_OAUTH_REFRESH,
   };
 };
@@ -9,11 +14,13 @@ export const createOrUpdateRefreshToken = (
   accessToken?: string | null,
   refreshToken?: string | null
 ) => {
-  if (refreshToken) {
-    process.env["GOOGLE_OAUTH_REFRESH"] = refreshToken;
-  }
   if (accessToken) {
     process.env["GOOGLE_OAUTH_ACCESS"] = accessToken;
   }
+  if (refreshToken) {
+    process.env["GOOGLE_OAUTH_REFRESH"] = refreshToken;
+  }
   return getTokens();
 };
+
+resetTokens();

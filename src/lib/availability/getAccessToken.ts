@@ -14,10 +14,10 @@ export default async function getAccessToken(): Promise<string> {
   if (!process.env.GOOGLE_OAUTH_CLIENT_ID) {
     throw new Error("GOOGLE_OAUTH_CLIENT_ID not set");
   }
-  const { acessToken, refreshToken } = await getTokens();
-  console.log({ acessToken, refreshToken });
-  if (acessToken) {
-    return acessToken;
+  const { accessToken, refreshToken } = getTokens();
+  console.log({ accessToken, refreshToken });
+  if (accessToken) {
+    return accessToken;
   }
   if (!refreshToken) {
     throw new Error("GOOGLE_OAUTH_REFRESH not set");
@@ -39,6 +39,7 @@ export default async function getAccessToken(): Promise<string> {
   });
 
   const json = await response.json();
+  console.log("json", json);
 
   if (!json.access_token) {
     throw new Error(
