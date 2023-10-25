@@ -1,5 +1,5 @@
 import { OAuth2Client } from "google-auth-library";
-import { createOrUpdateRefreshToken } from "../db/sqlite";
+import { createOrUpdateRefreshToken } from "../redis/kv";
 
 const path = require("path");
 const SCOPES = [

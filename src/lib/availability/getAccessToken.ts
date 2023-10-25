@@ -1,4 +1,4 @@
-import { getTokens } from "../db/sqlite";
+import { getTokens } from "../redis/kv";
 
 /**
  * Retrieves an access token from Google using a refresh token.
@@ -14,7 +14,7 @@ export default async function getAccessToken(): Promise<string> {
   if (!process.env.GOOGLE_OAUTH_CLIENT_ID) {
     throw new Error("GOOGLE_OAUTH_CLIENT_ID not set");
   }
-  const { accessToken, refreshToken } = getTokens();
+  const { accessToken, refreshToken } = await getTokens();
   console.log({ accessToken, refreshToken });
   if (accessToken) {
     return accessToken;
