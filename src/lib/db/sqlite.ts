@@ -15,10 +15,10 @@ export const createOrUpdateRefreshToken = (
   refreshToken?: string | null
 ) => {
   if (accessToken) {
-    process.env["GOOGLE_OAUTH_ACCESS"] = accessToken;
+    process.env.GOOGLE_OAUTH_ACCESS = accessToken;
   }
   if (refreshToken) {
-    process.env["GOOGLE_OAUTH_REFRESH"] = refreshToken;
+    process.env.GOOGLE_OAUTH_REFRESH = refreshToken;
   }
   console.log("tokens set");
   console.log(process.env);
