@@ -80,11 +80,12 @@ const Scheduler = ({ busy }: { busy: DateTimeInterval[] }) => {
     store.resetStore();
   };
   if (res?.message) {
-    toast({
-      title: "Error creating event",
-      description: res.message,
-      variant: "destructive",
-    });
+    // toast({
+    //   title: "Error creating event",
+    //   description: res.message,
+    //   variant: "destructive",
+    // });
+    console.log(res.message);
   }
   const handleAction = () => {
     const formData = new FormData();

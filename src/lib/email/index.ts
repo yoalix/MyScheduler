@@ -1,5 +1,6 @@
 import type { SendMailOptions, Transporter } from "nodemailer";
 import { createTransport } from "nodemailer";
+import { getTokens } from "../redis/kv";
 
 type SendMailParams = {
   to: string;
@@ -35,7 +36,7 @@ function configureTransporter(): Transporter {
  */
 async function sendMail({ to, subject, body }: SendMailParams): Promise<void> {
   const transporter = configureTransporter();
-
+  const { refreshToken } = await getTokens();
   await transporter.sendMail({
     from: {
       address: process.env.OWNER_EMAIL,
@@ -46,7 +47,7 @@ async function sendMail({ to, subject, body }: SendMailParams): Promise<void> {
     html: body,
     auth: {
       user: process.env.OWNER_EMAIL,
-      refreshToken: process.env.GOOGLE_OAUTH_REFRESH,
+      refreshToken: refreshToken,
     },
   } as SendMailOptions & { auth: { user: string; refreshToken: string; accessToken?: string } });
 }
