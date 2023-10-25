@@ -16,7 +16,7 @@ export default async function Home() {
 
   return (
     <ReactQueryProvider>
-      <main className="flex min-h-screen flex-col items-center justify-start p-24">
+      <main className="flex min-h-screen flex-col items-center justify-center">
         <div className="self-end">{/* <ThemeToggle /> */}</div>
         <Scheduler busy={busy} />
       </main>

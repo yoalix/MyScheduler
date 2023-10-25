@@ -31,7 +31,7 @@ const AvailableTimes = ({ availability }: AvailableTimesProps) => {
       <Select
         onValueChange={(time) => (store.state.selectedTime = JSON.parse(time))}
       >
-        <SelectTrigger className="md:w-[15rem] w-full">
+        <SelectTrigger className="w-full">
           <SelectValue placeholder={"Select a time"} />
         </SelectTrigger>
         <SelectContent className="w-[15rem] h-[20rem]">

@@ -28,7 +28,7 @@ const TimezonePicker = () => {
             variant="outline"
             role="combobox"
             aria-expanded={open}
-            className="md:w-[15rem] w-full justify-between"
+            className="w-full justify-between"
           >
             <p className="truncate">
               {selectedTimeZoneValue

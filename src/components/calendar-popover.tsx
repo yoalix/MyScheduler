@@ -33,7 +33,7 @@ const CalendarPopover = ({
           <Button
             variant={"outline"}
             className={cn(
-              "md:w-[15rem] w-full pl-3 text-left font-normal",
+              "w-full pl-3 text-left font-normal",
               !snap.state.selectedDate && "text-muted-foreground"
             )}
           >
