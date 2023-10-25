@@ -1,8 +1,19 @@
-export const getRefreshToken = () => {
-  return process.env.GOOGLE_OAUTH_REFRESH;
+export const getTokens = () => {
+  return {
+    acessToken: process.env.GOOGLE_OAUTH_ACCESS,
+    refreshToken: process.env.GOOGLE_OAUTH_REFRESH,
+  };
 };
 
-export const createOrUpdateRefreshToken = (token: string) => {
-  process.env["GOOGLE_OAUTH_REFRESH"] = token;
-  return getRefreshToken();
+export const createOrUpdateRefreshToken = (
+  accessToken?: string | null,
+  refreshToken?: string | null
+) => {
+  if (refreshToken) {
+    process.env["GOOGLE_OAUTH_REFRESH"] = refreshToken;
+  }
+  if (accessToken) {
+    process.env["GOOGLE_OAUTH_ACCESS"] = accessToken;
+  }
+  return getTokens();
 };

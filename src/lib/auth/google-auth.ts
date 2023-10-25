@@ -19,8 +19,8 @@ export async function getAndStoreTokens(code: string) {
   const { tokens } = await oauth2Client.getToken({
     code: code,
   });
-  if (tokens.refresh_token) {
-    createOrUpdateRefreshToken(tokens.refresh_token);
+  if (tokens.refresh_token || tokens.access_token) {
+    createOrUpdateRefreshToken(tokens.access_token, tokens.refresh_token);
   }
   return tokens;
 }
