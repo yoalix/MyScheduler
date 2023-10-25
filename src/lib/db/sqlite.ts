@@ -20,6 +20,8 @@ export const createOrUpdateRefreshToken = (
   if (refreshToken) {
     process.env["GOOGLE_OAUTH_REFRESH"] = refreshToken;
   }
+  console.log("tokens set");
+  console.log(process.env);
   return getTokens();
 };
 
