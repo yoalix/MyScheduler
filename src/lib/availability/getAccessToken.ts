@@ -1,4 +1,4 @@
-import { getTokens } from "../redis/kv";
+import { getTokens, setAccessToken } from "../redis/kv";
 
 /**
  * Retrieves an access token from Google using a refresh token.
@@ -14,7 +14,7 @@ export default async function getAccessToken(): Promise<string> {
   if (!process.env.GOOGLE_OAUTH_CLIENT_ID) {
     throw new Error("GOOGLE_OAUTH_CLIENT_ID not set");
   }
-  const { accessToken, refreshToken } = await getTokens();
+  let { accessToken, refreshToken } = await getTokens();
   console.log({ accessToken, refreshToken });
   if (accessToken) {
     return accessToken;
@@ -39,13 +39,11 @@ export default async function getAccessToken(): Promise<string> {
   });
 
   const json = await response.json();
-  console.log("json", json);
 
   if (!json.access_token) {
     throw new Error(
       `Couldn't get access token: ${JSON.stringify(json, null, 2)}`
     );
   }
-
-  return json.access_token as string;
+  return setAccessToken(json.access_token, json.expires_in);
 }

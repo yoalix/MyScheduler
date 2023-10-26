@@ -11,13 +11,26 @@ export const getTokens = async () => {
 
 export const createOrUpdateRefreshToken = async (
   accessToken?: string | null,
-  refreshToken?: string | null
+  refreshToken?: string | null,
+  expire?: number | null
 ) => {
+  let options;
+  if (expire) {
+    options = { pxat: expire };
+  }
   if (accessToken) {
-    await kv.set("accessToken", accessToken);
+    await kv.set("accessToken", accessToken, options);
   }
   if (refreshToken) {
     await kv.set("refreshToken", refreshToken);
   }
   return getTokens();
+};
+
+export const setAccessToken = async (
+  accessToken: string,
+  expire: number
+): Promise<string> => {
+  await kv.set("accessToken", accessToken, { ex: expire });
+  return accessToken;
 };

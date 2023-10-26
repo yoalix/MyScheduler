@@ -20,7 +20,11 @@ export async function getAndStoreTokens(code: string) {
     code: code,
   });
   if (tokens.refresh_token || tokens.access_token) {
-    createOrUpdateRefreshToken(tokens.access_token, tokens.refresh_token);
+    createOrUpdateRefreshToken(
+      tokens.access_token,
+      tokens.refresh_token,
+      tokens.expiry_date
+    );
   }
   return tokens;
 }
